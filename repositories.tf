@@ -68,6 +68,45 @@ resource "github_branch_protection" "branch-protection" {
 }
 
 # ---------------------------------------------------------
+# Environments
+# ---------------------------------------------------------
+
+locals {
+  environments = merge([for rkey, rval in var.repositories : { for ekey, evalue in rval.environments : "${rkey}-${ekey}" => merge(evalue, { repo = rkey }) }]...)
+}
+
+data "github_user" "env-reviewer-user" {
+  # Find all users that are not all numbers (e.g assumed to be a username rather than ID) so we can perform a data lookup
+  for_each = toset(flatten([ for env in local.environments : [ for user in env.reviewers.users : user if can(tonumber(user)) == false ]]))
+
+  username = each.value
+}
+
+data "github_team" "env-reviewer-team" {
+  # Find all teams that are not all numbers (e.g assumed to be a team name rather than ID) and also not a key in the teams created in this module so we can perform a data lookup
+  for_each = toset(flatten([ for env in local.environments : [ for team in env.reviewers.teams : team if can(tonumber(team)) == false && can(github_team.team[team]) == false ]]))
+
+  slug = each.value
+}
+
+resource "github_repository_environment" "environment" {
+  for_each = local.environments
+
+  environment         = each.value.name
+  repository          = github_repository.repo[each.value.repo].name
+  can_admins_bypass   = each.value.can_admins_bypass
+  prevent_self_review = each.value.prevent_self_review
+  reviewers {
+    users = length(each.value.reviewers.users) > 0 ? [ for user in each.value.reviewers.users : try(data.github_user.env-reviewer-user[user].id, user) ] : null
+    teams = length(each.value.reviewers.teams) > 0 ? [ for team in each.value.reviewers.teams : try(github_team.team[team].id, try(data.github_team.env-reviewer-team[team].id, team)) ] : null # Order: team created in this module -> team via data block -> team ID
+  }
+  deployment_branch_policy {
+    protected_branches     = each.value.protected_branches_only
+    custom_branch_policies = each.value.custom_branch_policies
+  }
+}
+
+# ---------------------------------------------------------
 # Allowed Actions
 # ---------------------------------------------------------
 
