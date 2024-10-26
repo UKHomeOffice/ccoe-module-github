@@ -21,7 +21,7 @@ The module can be called from your Terraform as shown in this example below:
 ```
 
 module "example" {
-  source = "github.com/UKHomeOffice/ccoe-module-github?ref=v1.1.0"
+  source = "github.com/UKHomeOffice/ccoe-module-github?ref=v1.2.0"
 
   # ---------------------------------------------------------
   # Repositories
@@ -56,6 +56,13 @@ module "example" {
     "ccoe" = {
       name         = "ccoe"
       description  = "Cloud Centre of Excellence (CCoE) site."
+      url          = "https://ccoe.homeoffice.gov.uk"
+      protected_branches = {
+        "main" = {
+          pattern   = "main"
+          read_only = true
+        }
+      }
       environments = {
         blue = {
           name = "blue"

@@ -9,10 +9,11 @@
 resource "github_repository" "repo" {
   for_each = var.repositories
 
-  name        = each.value.name
-  description = each.value.description
-  visibility  = each.value.visibility
-  archived    = each.value.archived
+  name         = each.value.name
+  description  = each.value.description
+  homepage_url = each.value.url
+  visibility   = each.value.visibility
+  archived     = each.value.archived
 
   delete_branch_on_merge = true
 
@@ -54,6 +55,7 @@ resource "github_branch_protection" "branch-protection" {
   require_signed_commits          = true
   allows_deletions                = true
   allows_force_pushes             = false
+  lock_branch                     = each.value.read_only
 
   required_status_checks {
     strict   = true
@@ -77,14 +79,14 @@ locals {
 
 data "github_user" "env-reviewer-user" {
   # Find all users that are not all numbers (e.g assumed to be a username rather than ID) so we can perform a data lookup
-  for_each = toset(flatten([ for env in local.environments : [ for user in env.reviewers.users : user if can(tonumber(user)) == false ]]))
+  for_each = toset(flatten([for env in local.environments : [for user in env.reviewers.users : user if can(tonumber(user)) == false]]))
 
   username = each.value
 }
 
 data "github_team" "env-reviewer-team" {
   # Find all teams that are not all numbers (e.g assumed to be a team name rather than ID) and also not a key in the teams created in this module so we can perform a data lookup
-  for_each = toset(flatten([ for env in local.environments : [ for team in env.reviewers.teams : team if can(tonumber(team)) == false && can(github_team.team[team]) == false ]]))
+  for_each = toset(flatten([for env in local.environments : [for team in env.reviewers.teams : team if can(tonumber(team)) == false && can(github_team.team[team]) == false]]))
 
   slug = each.value
 }
@@ -97,8 +99,8 @@ resource "github_repository_environment" "environment" {
   can_admins_bypass   = each.value.can_admins_bypass
   prevent_self_review = each.value.prevent_self_review
   reviewers {
-    users = length(each.value.reviewers.users) > 0 ? [ for user in each.value.reviewers.users : try(data.github_user.env-reviewer-user[user].id, user) ] : null
-    teams = length(each.value.reviewers.teams) > 0 ? [ for team in each.value.reviewers.teams : try(github_team.team[team].id, try(data.github_team.env-reviewer-team[team].id, team)) ] : null # Order: team created in this module -> team via data block -> team ID
+    users = length(each.value.reviewers.users) > 0 ? [for user in each.value.reviewers.users : try(data.github_user.env-reviewer-user[user].id, user)] : null
+    teams = length(each.value.reviewers.teams) > 0 ? [for team in each.value.reviewers.teams : try(github_team.team[team].id, try(data.github_team.env-reviewer-team[team].id, team))] : null # Order: team created in this module -> team via data block -> team ID
   }
   deployment_branch_policy {
     protected_branches     = each.value.protected_branches_only
