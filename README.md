@@ -7,6 +7,7 @@ It supports the creation of:
 - Actions permissions
 - Teams
 - Teams permissions
+- Environments
 
 By using this module you ensure that:
 - All repos are built to a standard pattern
