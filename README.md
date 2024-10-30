@@ -18,10 +18,9 @@ By using this module you ensure that:
 
 The module can be called from your Terraform as shown in this example below:
 
-```
-
+```hcl
 module "example" {
-  source = "github.com/UKHomeOffice/ccoe-module-github?ref=v1.2.0"
+  source = "github.com/UKHomeOffice/ccoe-module-github?ref=v1.2.1"
 
   # ---------------------------------------------------------
   # Repositories
@@ -110,5 +109,4 @@ module "example" {
     }
   }
 }
-
 ```
