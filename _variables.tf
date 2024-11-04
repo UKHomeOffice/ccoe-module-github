@@ -35,7 +35,7 @@ variable "repositories" {
     })), {})
     projects = optional(map(object({
       name = string
-      body = string
+      body = optional(string, "")
       columns = map(object({
         name = string
       }))
