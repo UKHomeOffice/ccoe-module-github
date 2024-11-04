@@ -23,7 +23,7 @@ The module can be called from your Terraform as shown in this example below:
 
 ```hcl
 module "example" {
-  source = "github.com/UKHomeOffice/ccoe-module-github?ref=v1.3.0"
+  source = "github.com/UKHomeOffice/ccoe-module-github?ref=v1.3.1"
 
   # ---------------------------------------------------------
   # Repositories
@@ -59,6 +59,7 @@ module "example" {
       name            = "ccoe"
       description     = "Cloud Centre of Excellence (CCoE) site."
       url             = "https://ccoe.homeoffice.gov.uk"
+      has_projects    = true
       allowed_actions = ["cypress-io/*"]
       protected_branches = {
         "main" = {
@@ -77,19 +78,6 @@ module "example" {
           name = "green"
           reviewers = {
             teams = ["Admin"]
-          }
-        }
-      }
-      projects = {
-        "CCoE" = {
-          name = "CCoE"
-          columns = {
-            "In Progress" = {
-              name = "In Progress"
-            }
-            "Done" = {
-              name = "Done"
-            }
           }
         }
       }
@@ -127,6 +115,24 @@ module "example" {
         }
         "mhosker" = {
           role = "member"
+        }
+      }
+    }
+  }
+
+  # ---------------------------------------------------------
+  # Projects
+  # ---------------------------------------------------------
+
+  projects = {
+    "CCoE" = {
+      name = "CCoE"
+      columns = {
+        "In Progress" = {
+          name = "In Progress"
+        }
+        "Done" = {
+          name = "Done"
         }
       }
     }

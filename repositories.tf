@@ -20,7 +20,7 @@ resource "github_repository" "repo" {
   has_downloads   = false
   has_issues      = true
   has_discussions = each.value.has_discussions
-  has_projects    = length(each.value.projects) > 0 ? true : false
+  has_projects    = each.value.has_projects
   has_wiki        = each.value.has_wiki
 
   vulnerability_alerts = true
@@ -130,30 +130,6 @@ resource "github_actions_repository_permissions" "allowed-actions" {
       "hashicorp/*",
     ], each.value.allowed_actions)
   }
-}
-
-# ---------------------------------------------------------
-# Projects
-# ---------------------------------------------------------
-
-locals {
-  projects = merge([for rkey, rval in var.repositories : { for pkey, pvalue in rval.projects : "${rkey}-${pkey}" => merge(pvalue, { repo = rkey }) }]...)
-  columns  = merge([ for pkey, pval in local.projects : { for ckey, cvalue in pval.columns : "${pkey}-${ckey}" => merge(cvalue, { project = pkey }) }]...)
-}
-
-resource "github_repository_project" "project" {
-  for_each = local.projects
-
-  name       = each.value.name
-  repository = github_repository.repo[each.value.repo].name
-  body       = each.value.body
-}
-
-resource "github_project_column" "column" {
-  for_each = local.columns
-
-  project_id = github_repository_project.project[each.value.project].id
-  name       = each.value.name
 }
 
 # ---------------------------------------------------------
