@@ -19,6 +19,7 @@ resource "github_repository" "repo" {
 
   has_downloads   = false
   has_issues      = true
+  has_discussions = each.value.has_discussions
   has_projects    = length(each.value.projects) > 0 ? true : false
   has_wiki        = each.value.has_wiki
 
