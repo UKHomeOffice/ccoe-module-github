@@ -8,11 +8,14 @@
 
 variable "repositories" {
   type = map(object({
-    name        = string
-    description = string
-    url         = optional(string, null)
-    visibility  = optional(string, "internal")
-    archived    = optional(bool, false)
+    name            = string
+    description     = string
+    url             = optional(string, null)
+    has_discussions = optional(bool, false)
+    has_wiki        = optional(bool, false)
+    visibility      = optional(string, "internal")
+    archived        = optional(bool, false)
+    allowed_actions = optional(list(string), [])
     protected_branches = optional(map(object({
       pattern                         = string
       checks                          = optional(list(string), [])
@@ -31,7 +34,18 @@ variable "repositories" {
         teams = optional(list(string), []) # Either ID (number) OR key from team map OR GitHub team name
       }), {})
     })), {})
-    allowed_actions = optional(list(string), [])
+    projects = optional(map(object({
+      name = string
+      body = optional(string, "")
+      columns = map(object({
+        name = string
+      }))
+    })), {})
+    issue_labels = optional(map(object({
+      name        = string
+      color       = string
+      description = optional(string, "")
+    })), {})
   }))
   description = "Repositories to create."
 }
