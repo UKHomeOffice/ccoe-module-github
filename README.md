@@ -8,6 +8,8 @@ It supports the creation of:
 - Teams
 - Teams permissions
 - Environments
+- Issue Labels
+- Projects
 
 By using this module you ensure that:
 - All repos are built to a standard pattern
@@ -21,7 +23,7 @@ The module can be called from your Terraform as shown in this example below:
 
 ```hcl
 module "example" {
-  source = "github.com/UKHomeOffice/ccoe-module-github?ref=v1.2.1"
+  source = "github.com/UKHomeOffice/ccoe-module-github?ref=v1.3.0"
 
   # ---------------------------------------------------------
   # Repositories
@@ -54,9 +56,10 @@ module "example" {
       archived    = true
     }
     "ccoe" = {
-      name         = "ccoe"
-      description  = "Cloud Centre of Excellence (CCoE) site."
-      url          = "https://ccoe.homeoffice.gov.uk"
+      name            = "ccoe"
+      description     = "Cloud Centre of Excellence (CCoE) site."
+      url             = "https://ccoe.homeoffice.gov.uk"
+      allowed_actions = ["cypress-io/*"]
       protected_branches = {
         "main" = {
           pattern   = "main"
@@ -75,6 +78,25 @@ module "example" {
           reviewers = {
             teams = ["Admin"]
           }
+        }
+      }
+      projects = {
+        "CCoE" = {
+          name = "CCoE"
+          columns = {
+            "In Progress" = {
+              name = "In Progress"
+            }
+            "Done" = {
+              name = "Done"
+            }
+          }
+        }
+      }
+      issue_labels = {
+        "Content" = {
+          name  = "Content"
+          color = "FF0000"
         }
       }
     }
