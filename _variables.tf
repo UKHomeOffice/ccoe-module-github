@@ -11,6 +11,7 @@ variable "repositories" {
     name            = string
     description     = string
     url             = optional(string, null)
+    has_projects    = optional(bool, false)
     has_discussions = optional(bool, false)
     has_wiki        = optional(bool, false)
     visibility      = optional(string, "internal")
@@ -33,13 +34,6 @@ variable "repositories" {
         users = optional(list(string), []) # Either ID (number) OR GitHub username
         teams = optional(list(string), []) # Either ID (number) OR key from team map OR GitHub team name
       }), {})
-    })), {})
-    projects = optional(map(object({
-      name = string
-      body = optional(string, "")
-      columns = map(object({
-        name = string
-      }))
     })), {})
     issue_labels = optional(map(object({
       name        = string
@@ -65,4 +59,18 @@ variable "teams" {
     }))
   }))
   description = "Teams to create."
+}
+
+# ---------------------------------------------------------
+# Projects
+# ---------------------------------------------------------
+
+variable "projects" {
+    type = map(object({
+      name = string
+      body = optional(string, "")
+      columns = map(object({
+        name = string
+      }))
+    }))
 }
