@@ -155,3 +155,16 @@ resource "github_project_column" "column" {
   project_id = github_repository_project.project[each.value.project].id
   name       = each.value.name
 }
+
+# ---------------------------------------------------------
+# Issue Labels
+# ---------------------------------------------------------
+
+resource "github_issue_label" "label" {
+  for_each = merge([for rkey, rval in var.repositories : { for ilkey, ilvalue in rval.issue_labels : "${rkey}-${ilkey}" => merge(ilvalue, { repo = rkey }) }]...)
+
+  repository  = github_repository.repo[each.value.repo].name
+  name        = each.value.name
+  color       = each.value.color
+  description = each.value.description
+}

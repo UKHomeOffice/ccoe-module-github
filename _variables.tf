@@ -41,6 +41,11 @@ variable "repositories" {
         name = string
       }))
     })), {})
+    issue_labels = optional(map(object({
+      name        = string
+      color       = string
+      description = optional(string, "")
+    })), {})
   }))
   description = "Repositories to create."
 }
