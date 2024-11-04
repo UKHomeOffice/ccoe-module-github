@@ -15,6 +15,7 @@ variable "repositories" {
     has_wiki        = optional(bool, false)
     visibility      = optional(string, "internal")
     archived        = optional(bool, false)
+    allowed_actions = optional(list(string), [])
     protected_branches = optional(map(object({
       pattern                         = string
       checks                          = optional(list(string), [])
@@ -40,7 +41,6 @@ variable "repositories" {
         name = string
       }))
     })), {})
-    allowed_actions = optional(list(string), [])
   }))
   description = "Repositories to create."
 }
