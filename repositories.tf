@@ -17,10 +17,10 @@ resource "github_repository" "repo" {
 
   delete_branch_on_merge = true
 
-  has_wiki      = false
   has_downloads   = false
   has_issues      = true
   has_projects    = length(each.value.projects) > 0 ? true : false
+  has_wiki        = each.value.has_wiki
 
   vulnerability_alerts = true
 
