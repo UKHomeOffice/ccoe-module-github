@@ -60,17 +60,3 @@ variable "teams" {
   }))
   description = "Teams to create."
 }
-
-# ---------------------------------------------------------
-# Projects
-# ---------------------------------------------------------
-
-variable "projects" {
-    type = map(object({
-      name = string
-      body = optional(string, "")
-      columns = map(object({
-        name = string
-      }))
-    }))
-}
