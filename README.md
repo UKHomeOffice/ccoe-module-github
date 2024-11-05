@@ -9,7 +9,6 @@ It supports the creation of:
 - Teams permissions
 - Environments
 - Issue Labels
-- Projects
 
 By using this module you ensure that:
 - All repos are built to a standard pattern
@@ -23,7 +22,7 @@ The module can be called from your Terraform as shown in this example below:
 
 ```hcl
 module "example" {
-  source = "github.com/UKHomeOffice/ccoe-module-github?ref=v1.3.1"
+  source = "github.com/UKHomeOffice/ccoe-module-github?ref=v1.3.2"
 
   # ---------------------------------------------------------
   # Repositories
@@ -115,24 +114,6 @@ module "example" {
         }
         "mhosker" = {
           role = "member"
-        }
-      }
-    }
-  }
-
-  # ---------------------------------------------------------
-  # Projects
-  # ---------------------------------------------------------
-
-  projects = {
-    "CCoE" = {
-      name = "CCoE"
-      columns = {
-        "In Progress" = {
-          name = "In Progress"
-        }
-        "Done" = {
-          name = "Done"
         }
       }
     }
