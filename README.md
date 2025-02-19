@@ -22,11 +22,14 @@ The module can be called from your Terraform as shown in this example below:
 
 ```hcl
 module "example" {
-  source = "github.com/UKHomeOffice/ccoe-module-github?ref=v1.3.3"
+  source = "github.com/UKHomeOffice/ccoe-module-github?ref=v1.3.4"
 
   # ---------------------------------------------------------
   # Defaults
   # ---------------------------------------------------------
+
+  # Overriding the default to allow verified GitHub actions in repos
+  default_actions_verified_allowed = true
 
   # Adding custom google-github-actions/* alongside standard defaults (this variable is optional)
   default_actions_allowed_patterns = ["aws-actions/*", "azure/*", "hashicorp/*", "google-github-actions/*"]
