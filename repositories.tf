@@ -124,11 +124,7 @@ resource "github_actions_repository_permissions" "allowed-actions" {
   allowed_actions_config {
     github_owned_allowed = true
     verified_allowed     = false
-    patterns_allowed = concat([
-      "aws-actions/*",
-      "azure/*",
-      "hashicorp/*",
-    ], each.value.allowed_actions)
+    patterns_allowed     = concat(var.default_actions_allowed_patterns, each.value.allowed_actions)
   }
 }
 
