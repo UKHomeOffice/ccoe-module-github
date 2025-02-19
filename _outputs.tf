@@ -6,7 +6,15 @@
 # Variables
 # ---------------------------------------------------------
 
-output "default_actions_allowed_patterns" {
+output "var_default_actions_allowed_restricted" {
+  value = var.default_actions_allowed_restricted
+}
+
+output "var_default_actions_verified_allowed" {
+  value = var.default_actions_verified_allowed
+}
+
+output "var_default_actions_allowed_patterns" {
   value = var.default_actions_allowed_patterns
 }
 
