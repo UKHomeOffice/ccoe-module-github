@@ -118,12 +118,12 @@ resource "github_actions_repository_permissions" "allowed-actions" {
 
   repository = github_repository.repo[each.key].name
 
-  allowed_actions = "selected"
+  allowed_actions = var.default_actions_allowed_restricted ? "selected" : "all"
   enabled         = true
 
   allowed_actions_config {
     github_owned_allowed = true
-    verified_allowed     = false
+    verified_allowed     = var.default_actions_verified_allowed
     patterns_allowed     = concat(var.default_actions_allowed_patterns, each.value.allowed_actions)
   }
 }
