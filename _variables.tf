@@ -6,6 +6,18 @@
 # Defaults
 # ---------------------------------------------------------
 
+variable "default_actions_allowed_restricted" {
+  type        = bool
+  description = "Whether GitHub actions should be restricted in repos."
+  default     = true
+}
+
+variable "default_actions_verified_allowed" {
+  type        = bool
+  description = "Whether actions in GitHub Marketplace from verified creators are allowed."
+  default     = false
+}
+
 variable "default_actions_allowed_patterns" {
   type        = list(string)
   description = "Default GitHub Actions Allowed Patterns"
