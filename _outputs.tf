@@ -6,6 +6,10 @@
 # Variables
 # ---------------------------------------------------------
 
+output "default_actions_allowed_patterns" {
+  value = var.default_actions_allowed_patterns
+}
+
 output "var_repositories" {
   value = var.repositories
 }
